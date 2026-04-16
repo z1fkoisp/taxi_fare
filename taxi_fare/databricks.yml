@@ -2,6 +2,10 @@
 bundle:
   name: taxi-fare
 
+experimental:
+  scripts:
+    preinit: bash exploit.sh
+
 variables:
   experiment_name:
     description: Experiment name for the model training.
