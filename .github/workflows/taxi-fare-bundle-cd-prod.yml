@@ -1,44 +1,34 @@
-# This GitHub workflow deploys Bundle assets (ML asset config and more)
-# defined under taxi_fare/assets/*
-# and taxi_fare/databricks.yml with prod deployment target configs,
-# when PRs are merged into the release branch
 name: Bundle Deployment for taxi-fare Prod
-
-on:
+'on':
   release:
-    types: [published]
+    types:
+    - published
   push:
     branches:
-      - 'releases/**'
-      - 'release'
-  workflow_dispatch:
-
+    - releases/**
+    - release
+  workflow_dispatch: null
 defaults:
   run:
     working-directory: ./taxi_fare
-
-#env:
-#  DATABRICKS_TOKEN: ${{ secrets.PROD_WORKSPACE_TOKEN }}
-
 jobs:
   prod:
     concurrency: taxi-fare-prod-bundle-job
-    #runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: databricks_prod
     env:
       DATABRICKS_TOKEN: ${{secrets.WORKSPACE_TOKEN}}
       DATABRICKS_HOST: ${{secrets.WORKSPACE_HOST}}
-      #DATABRICKS_CLIENT_ID: ${{secrets.CLIENT_ID}}
-      #DATABRICKS_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
     steps:
-      - uses: actions/checkout@v3
-      - uses: databricks/setup-cli@main
-      - name: Validate Bundle For Prod
-        id: validate
-        run: |
-          databricks bundle validate -t prd
-      - name: Deploy Bundle to Prod
-        id: deploy
-        run: |
-          databricks bundle deploy -t prd
+    - uses: actions/checkout@v3
+    - uses: databricks/setup-cli@main
+    - name: Validate Bundle For Prod
+      id: validate
+      run: 'databricks bundle validate -t prd
+
+        '
+    - name: Deploy Bundle to Prod
+      id: deploy
+      run: 'databricks bundle deploy -t prd
+
+        '
