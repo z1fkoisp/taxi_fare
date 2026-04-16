@@ -1,41 +1,30 @@
-# This GitHub workflow deploys Bundle assets (ML asset config and more)
-# defined under taxi_fare/assets/*
-# and taxi_fare/databricks.yml with staging deployment target configs,
-# when PRs are merged into the default branch
 name: Bundle Deployment for taxi-fare Staging
-
-on:
+'on':
   push:
     branches:
-      - 'main'
-  workflow_dispatch:
-
+    - main
+  workflow_dispatch: null
 defaults:
   run:
     working-directory: ./taxi_fare
-
-#env:
-#  DATABRICKS_TOKEN: ${{ secrets.STAGING_WORKSPACE_TOKEN }}
-
 jobs:
   staging:
     concurrency: taxi-fare-staging-bundle-job
-    #runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: databricks_staging
     env:
       DATABRICKS_TOKEN: ${{secrets.WORKSPACE_TOKEN}}
       DATABRICKS_HOST: ${{secrets.WORKSPACE_HOST}}
-      #DATABRICKS_CLIENT_ID: ${{secrets.CLIENT_ID}}
-      #DATABRICKS_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
     steps:
-      - uses: actions/checkout@v3
-      - uses: databricks/setup-cli@main
-      - name: Validate Bundle For Staging
-        id: validate
-        run: |
-          databricks bundle validate -t stg
-      - name: Deploy Bundle to Staging
-        id: deploy
-        run: |
-          databricks bundle deploy -t stg
+    - uses: actions/checkout@v3
+    - uses: databricks/setup-cli@main
+    - name: Validate Bundle For Staging
+      id: validate
+      run: 'databricks bundle validate -t stg
+
+        '
+    - name: Deploy Bundle to Staging
+      id: deploy
+      run: 'databricks bundle deploy -t stg
+
+        '
